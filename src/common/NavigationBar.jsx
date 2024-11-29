@@ -39,37 +39,9 @@ import {
 export default function NavigationBar() {
   const navigate = useNavigate();
 
-  // const location = useLocation();
-  // const [activeHome, setActiveHome] = useState(location.pathname === "/home");
-  // const loginUser = useRecoilValue(loginUserState);
-  // const [showBasic, setShowBasic] = useState(false); // Add this line
-  // const setOrderPage = useSetRecoilState(orderPageNumState);
-
-  //ホームにいる時に、ボタンの背景を黒に設定
-  // useEffect(() => {
-  //   setActiveHome(location.pathname === "/home");
-  // }, [location.pathname]);
-
-  // const handleClickHome = () => {
-  //   setOrderPage(1);
-  //   setActiveHome(true);
-  //   navigate("/home");
-  // };
-
   const goHome = () => {
     navigate("/works");
   };
-
-  // const handleUserEdit = (e) => {
-  //   e.preventDefault();
-  //   setOrderPage(1);
-  //   navigate("/userEdit");
-  // };
-
-  // const goOrderHistory = (e) => {
-  //   e.preventDefault();
-  //   navigate("/order");
-  // };
 
   return (
     <div className="sticky-top">
@@ -87,26 +59,12 @@ export default function NavigationBar() {
                 fontWeight: "bold",
                 userSelect: "none",
               }}
-              // onClick={() => setOrderPage(1)}
             >
               Dulripos Portfolio
             </span>
           </MDBNavbarBrand>
 
-          {/* <MDBNavbarToggler
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            onClick={() => setShowBasic(!showBasic)}
-          >
-            <MDBIcon icon="bars" fas />
-          </MDBNavbarToggler> */}
-
-          <MDBCollapse
-            navbar
-            // show={showBasic}
-            className="ms-5"
-          >
+          <MDBCollapse navbar className="ms-5">
             <MDBNavbarNav
               className="ml-auto d-flex align-items-center"
               style={{ marginLeft: "80px" }}
@@ -127,7 +85,7 @@ export default function NavigationBar() {
                       fontWeight: "bold",
                       userSelect: "none",
                       cursor: "pointer",
-                      position: "relative", // 擬似要素に位置付けを使う
+                      position: "relative",
                       display: "inline-block",
                     }}
                   >
@@ -152,7 +110,7 @@ export default function NavigationBar() {
                       fontWeight: "bold",
                       userSelect: "none",
                       cursor: "pointer",
-                      position: "relative", // 擬似要素に位置付けを使う
+                      position: "relative",
                       display: "inline-block",
                     }}
                   >
