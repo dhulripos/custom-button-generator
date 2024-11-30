@@ -95,7 +95,22 @@ export default function CustomButtonGenerate() {
     setMessage(text);
     setTimeout(() => setMessage(""), 2000); // 2秒後に非表示
   };
+  // まとめてコピーする値を格納する変数
+  const copiedIntegratedCode = (() => {
+    let result = "";
+    if (HTMLCode !== "なし" && CSSCode !== "なし" && JSCode !== "なし") {
+      result += HTMLCode + CSSCode + JSCode;
+      return result;
+    } else if (HTMLCode !== "なし" && CSSCode === "なし" && JSCode === "なし") {
+      result += HTMLCode;
+      return result;
+    } else if (HTMLCode !== "なし" && CSSCode !== "なし" && JSCode === "なし") {
+      result += HTMLCode + CSSCode;
+      return result;
+    }
+  })();
 
+  // 以下ハンドラーを記述
   const handleSetKindsOfButton = (e, element, index) => {
     // ICONが選択された場合は、BUTTONの情報を残したいため、Recoilは更新しないようにif文の中でreturnする
     // BUTTONは入力項目が多いので、最初から入力するような事態にしたくない
@@ -1833,31 +1848,48 @@ export default function CustomButtonGenerate() {
                     </CopyToClipboard>
                     <CopyToClipboard
                       text={JSCode}
-                      onCopy={() =>
-                        showCopyMessage("JavaScriptをコピーしました")
-                      }
+                      onCopy={() => showCopyMessage("JSをコピーしました")}
                     >
                       <button
                         style={{
+                          marginRight: "5px",
                           backgroundColor: "#66e0ff",
                           border: "none",
                           borderRadius: 10,
                         }}
+                        className=""
                       >
                         Copy JS
+                      </button>
+                    </CopyToClipboard>
+                    <CopyToClipboard
+                      text={copiedIntegratedCode}
+                      onCopy={() => showCopyMessage("まとめてコピーしました")}
+                    >
+                      <button
+                        style={{
+                          color: "white",
+                          marginRight: "5px",
+                          backgroundColor: "#1a53ff",
+                          border: "none",
+                          borderRadius: 10,
+                        }}
+                      >
+                        まとめてコピー
                       </button>
                     </CopyToClipboard>
                     {/* コピー時のメッセージ表示 */}
                     {message && (
                       <div
                         style={{
+                          marginRight: "5px",
                           backgroundColor: "#4caf50",
                           color: "white",
                           borderRadius: "5px",
                           boxShadow: "0 2px 5px rgba(0, 0, 0, 0.2)",
                           zIndex: 10,
                         }}
-                        className="ms-2 px-1"
+                        className="px-1"
                       >
                         {message}
                       </div>

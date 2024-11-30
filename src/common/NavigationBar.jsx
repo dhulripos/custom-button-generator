@@ -1,38 +1,14 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import emptyCart from "./Images/shopping-cart.png";
-import search from "./Images/loupe.png";
-import {
-  loginUserState,
-  UserState,
-  DateState,
-  pageNumState,
-  orderPageNumState,
-  subcatIdState,
-} from "../recoils/recoilState";
-import useLogout from "../hooks/useLogout";
-import { useQuery } from "@tanstack/react-query";
-import { checkPage } from "../recoils/recoilState";
-import logo from "./Images/navLogo.png";
 import LoadingMotion from "../utils/LoadingMotion";
 import { useNavigate, Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import "./Images/style.css";
 import { isAxiosError } from "axios";
 import {
   MDBContainer,
   MDBNavbar,
   MDBNavbarBrand,
-  MDBNavbarToggler,
-  MDBIcon,
   MDBNavbarNav,
   MDBNavbarItem,
-  MDBNavbarLink,
-  MDBDropdown,
-  MDBDropdownToggle,
-  MDBDropdownMenu,
-  MDBDropdownItem,
   MDBCollapse,
 } from "mdb-react-ui-kit";
 
@@ -60,7 +36,7 @@ export default function NavigationBar() {
                 userSelect: "none",
               }}
             >
-              Dulripos Portfolio
+              dhulripos Portfolio
             </span>
           </MDBNavbarBrand>
 
@@ -88,6 +64,7 @@ export default function NavigationBar() {
                       position: "relative",
                       display: "inline-block",
                     }}
+                    className="nav-hover-bg"
                   >
                     About me
                   </span>
@@ -113,6 +90,7 @@ export default function NavigationBar() {
                       position: "relative",
                       display: "inline-block",
                     }}
+                    className="nav-hover-bg"
                   >
                     Contact
                   </span>
@@ -138,6 +116,7 @@ export default function NavigationBar() {
                       position: "relative", // 擬似要素に位置付けを使う
                       display: "inline-block",
                     }}
+                    className="nav-hover-bg"
                   >
                     Blog(Qiita)
                   </span>
@@ -201,7 +180,7 @@ export default function NavigationBar() {
       </MDBNavbar>
       <style>
         {`
-          .hover-bg::after {
+          .nav-hover-bg::after {
             content: '';
             position: absolute;
             left: 0;
@@ -213,7 +192,7 @@ export default function NavigationBar() {
             transform-origin: right;
             transition: transform 0.3s ease;
           }
-          .hover-bg:hover::after {
+          .nav-hover-bg:hover::after {
             transform: scaleX(1);
             transform-origin: left;
           }

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import logo from "../common/Images/logo.png";
 import { loginUserState } from "../recoils/recoilState";
 import { useRecoilValue } from "recoil";
+import Warning from "../common/Images/warning.png";
 
 export default function PageNotFound() {
   const loginUser = useRecoilValue(loginUserState);
@@ -10,7 +10,7 @@ export default function PageNotFound() {
     <div className="container">
       <div className="d-flex justify-content-center m-5">
         <img
-          src={logo}
+          src={Warning}
           alt="Logo"
           className="img-fluid"
           style={{
