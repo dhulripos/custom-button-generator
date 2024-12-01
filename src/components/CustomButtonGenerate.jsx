@@ -1409,14 +1409,14 @@ export default function CustomButtonGenerate() {
             <script>
             function handleButtonClick() {
               const strUrlText = "${urlText}";
-            let judge = strUrlText !== "" ? strUrlText : undefined;
+              let judge = strUrlText !== "" ? strUrlText : undefined;
 
-            if (judge !== undefined) {
-              window.location.href = judge;
-              return;
-            } else {
-              return;
-            }
+              if (judge !== undefined) {
+                window.location.href = judge;
+                return;
+              } else {
+                return;
+              }
             }
             
             </script>`);
@@ -1555,7 +1555,7 @@ export default function CustomButtonGenerate() {
                         }
                       >
                         {isJapanese
-                          ? "ホバーの有無、クリック時のエフェクトの有無とその種類を選択"
+                          ? "ホバーエフェクトの有無、クリックエフェクトの有無を選択"
                           : "Choose whether to hover or not, and whether to use effects when clicked, and what type of effects they will have."}
                       </span>
                     </li>
