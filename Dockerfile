@@ -6,7 +6,7 @@
 FROM node:20.12.2-alpine AS build
 
 # ARM64対応のNginxイメージを指定
-FROM nginx:stable-alpine
+# FROM nginx:stable-alpine
 
 # 作業ディレクトリの設定
 WORKDIR /app
@@ -23,9 +23,12 @@ RUN npm run build
 
 # Nginxを使ってビルドしたファイルをホスト
 FROM nginx:stable-alpine
+
 # 上記の "build" ステージからファイルをコピー
 COPY --from=build /app/build /usr/share/nginx/html
+
 # 必要なポートを公開
 EXPOSE 80
+
 # Nginxを起動
 CMD ["nginx", "-g", "daemon off;"]
