@@ -28,7 +28,7 @@ export default function CustomButtonGenerate() {
       ? customButtonGeneratorRecoil.kindsOfButton
       : "ICON"
   ); // ボタンの種類をセットする
-  const hoverArr = ["なし", "色反転", "下線出現"];
+  const hoverArr = ["None", "Color Inversion", "Underline"];
   const [hoverState, setHoverState] = useState(
     customButtonGeneratorRecoil.hoverState !== (undefined || null || "")
       ? customButtonGeneratorRecoil.hoverState
@@ -40,7 +40,7 @@ export default function CustomButtonGenerate() {
       : "#ffffff"
   );
   // ホバーエフェクトの内容をセットする。どれか1つだけ選択可能
-  const clickArr = ["なし", "ripple", "changeScale"]; // クリック時のエフェクトの種類。どれか1つだけ選択可能
+  const clickArr = ["None", "ripple", "changeScale"]; // クリック時のエフェクトの種類。どれか1つだけ選択可能
   const [clickEffect, setClickEffect] = useState(
     customButtonGeneratorRecoil.clickEffect !== (undefined || null || "")
       ? customButtonGeneratorRecoil.clickEffect
@@ -87,39 +87,58 @@ export default function CustomButtonGenerate() {
   const [HTMLCode, setHTMLCode] = useState("");
   const [CSSCode, setCSSCode] = useState("");
   const [JSCode, setJSCode] = useState("");
-  const [isHovered, setIsHovered] = useState(false); // 画面に表示するボタンのホバー時エフェクトが下線出現のみのときに使用してる制御用変数
+  const [isHovered, setIsHovered] = useState(false); // 画面に表示するボタンのホバー時エフェクトがUnderlineのみのときに使用してる制御用変数
   const [message, setMessage] = useState(""); // メッセージ用のステート
+  const [isJapanese, setIsJapanese] = useState(
+    customButtonGeneratorRecoil.isJapanese !== (undefined || null || "")
+      ? customButtonGeneratorRecoil.isJapanese
+      : true
+  ); // 言語切り替えのステート管理（true:日本語,false:英語）
 
   // メッセージを表示する関数
   const showCopyMessage = (text) => {
     setMessage(text);
     setTimeout(() => setMessage(""), 2000); // 2秒後に非表示
   };
-  // まとめてコピーする値を格納する変数
+  // まとめてコピーする値を格納する変数。即時関数で値を入れるようにした。
   const copiedIntegratedCode = (() => {
     let result = "";
-    if (HTMLCode !== "なし" && CSSCode !== "なし" && JSCode !== "なし") {
+    if (HTMLCode !== "None" && CSSCode !== "None" && JSCode !== "None") {
       result += HTMLCode + CSSCode + JSCode;
       return result;
-    } else if (HTMLCode !== "なし" && CSSCode === "なし" && JSCode === "なし") {
+    } else if (HTMLCode !== "None" && CSSCode === "None" && JSCode === "None") {
       result += HTMLCode;
       return result;
-    } else if (HTMLCode !== "なし" && CSSCode !== "なし" && JSCode === "なし") {
+    } else if (HTMLCode !== "None" && CSSCode !== "None" && JSCode === "None") {
       result += HTMLCode + CSSCode;
       return result;
     }
   })();
 
-  // 以下ハンドラーを記述
+  // 日本語と英語の表示をを切り替えるハンドラー
+  const handleChangeLanguage = () => {
+    setIsJapanese((prev) => !prev);
+
+    // Recoilの更新(ローカルストレージの更新)
+    // useStateのset関数は非同期なので、Recoilの値も明示的にboolを反転させるように記述する必要がある
+    const newState = { ...CustomButtonGenerate, isJapanese: !isJapanese };
+    setCustomButtonGeneratorRecoilState((prev) => ({
+      ...prev,
+      ...newState, // まとめて更新
+    }));
+
+    return;
+  };
+
   const handleSetKindsOfButton = (e, element, index) => {
     // ICONが選択された場合は、BUTTONの情報を残したいため、Recoilは更新しないようにif文の中でreturnする
     // BUTTONは入力項目が多いので、最初から入力するような事態にしたくない
     if (element === "ICON") {
       setKindsOfButton(element);
 
-      setHTMLCode("なし");
-      setCSSCode("なし");
-      setJSCode("なし");
+      setHTMLCode("None");
+      setCSSCode("None");
+      setJSCode("None");
 
       return;
     }
@@ -245,6 +264,7 @@ export default function CustomButtonGenerate() {
       urlText,
       kindsOfButton,
       underlineColor,
+      isJapanese,
     };
 
     // Recoilの状態を更新
@@ -256,7 +276,7 @@ export default function CustomButtonGenerate() {
     return;
   };
 
-  // rippleと下線出現のcombinationで使用している
+  // rippleとUnderlineのcombinationで使用している
   const [ripples, setRipples] = useState([]);
   const handleRippleAndUnderline = (event) => {
     const rect = event.target.getBoundingClientRect();
@@ -367,7 +387,7 @@ export default function CustomButtonGenerate() {
     </button>
   );
 
-  // (画面表示用)ホバー時に色反転、クリック時のエフェクトはなし
+  // (画面表示用)ホバー時にColor Inversion、クリック時のエフェクトはなし
   const changeColorInHovering = (
     <button
       style={{
@@ -389,7 +409,7 @@ export default function CustomButtonGenerate() {
     </button>
   );
 
-  // (画面表示用)ホバーエフェクトが下線出現で、クリックエフェクトはない場合
+  // (画面表示用)ホバーエフェクトがUnderlineで、クリックエフェクトはない場合
   const onlyUnderLine = (
     <button
       style={{
@@ -435,7 +455,7 @@ export default function CustomButtonGenerate() {
     </button>
   );
 
-  // (画面表示用)クリックエフェクトがrippleで、ホバーエフェクトが下線出現の場合
+  // (画面表示用)クリックエフェクトがrippleで、ホバーエフェクトがUnderlineの場合
   const rippleAndUnderline = (
     <button
       onClick={handleRippleAndUnderline} // ripple
@@ -477,7 +497,7 @@ export default function CustomButtonGenerate() {
             right: 0;
             bottom: 0;
             height: 3px;
-            background: ${underlineColor}; // 下線の色
+            background: ${underlineColor};
             transform: scaleX(0);
             transform-origin: right;
             transition: transform 0.3s ease;
@@ -497,7 +517,7 @@ export default function CustomButtonGenerate() {
     </button>
   );
 
-  // (画面表示用)色反転とripple
+  // (画面表示用)Color Inversionとripple
   const colorInversionAndRipple = (
     <>
       <button
@@ -572,7 +592,7 @@ export default function CustomButtonGenerate() {
     </>
   );
 
-  // (画面表示用)色反転とchangeScale
+  // (画面表示用)Color InversionとchangeScale
   const colorInversionAndChangeScale = (
     <>
       <button
@@ -697,15 +717,15 @@ export default function CustomButtonGenerate() {
     // ボタンの種類がBUTTONの場合とICONの場合で制御したいので、boolの変数を作る
     const isButton = kindsOfButton === "BUTTON"; // BUTTONならtrue,ICONならfalse
 
-    // 下線出現とchangeScaleのとき
+    // UnderlineとchangeScaleのとき
     if (
       isButton &&
-      hoverState === "下線出現" &&
+      hoverState === "Underline" &&
       clickEffect === "changeScale"
     ) {
       setHTMLCode(` 
         <button class="button-css scale-button" onclick="handleUnderlineAndChangeScale(event)">
-          <span class="button-span-css">${buttonText}</span>
+          <span class="button-span-css hover-bg">${buttonText}</span>
         </button>`);
       setCSSCode(`
           <style>
@@ -761,12 +781,12 @@ export default function CustomButtonGenerate() {
             }
           </style>`);
 
-      // changeScaleはJSなしのため、下線出現のみ
+      // changeScaleはJSなしのため、Underlineのみ
       setJSCode(`
       <script>
           function handleUnderlineAndChangeScale(event) {
             const strUrlText = "${urlText}";
-            let judge = strUrlText !== ("undefined" || "") ? strUrlText : undefined;
+            let judge = strUrlText !== "" ? strUrlText : undefined;
 
             if (judge !== undefined) {
               window.location.href = judge;
@@ -782,8 +802,12 @@ export default function CustomButtonGenerate() {
       return;
     }
 
-    // 色反転とchangeScaleのとき
-    if (isButton && hoverState === "色反転" && clickEffect === "changeScale") {
+    // Color InversionとchangeScaleのとき
+    if (
+      isButton &&
+      hoverState === "Color Inversion" &&
+      clickEffect === "changeScale"
+    ) {
       setHTMLCode(
         `<button id="hoverButton" class="scale-button" onclick="handleChangeScale()">${buttonText}</button>`
       );
@@ -818,7 +842,7 @@ export default function CustomButtonGenerate() {
           }
         </style>`);
 
-      // changeScaleはJSなしなので、色反転のJSのみでOK
+      // changeScaleはJSなしなので、Color InversionのJSのみでOK
       setJSCode(`
         <script>
           const button = document.getElementById("hoverButton");
@@ -840,7 +864,7 @@ export default function CustomButtonGenerate() {
 
           function handleChangeScale(event) {
             const strUrlText = "${urlText}";
-            let judge = strUrlText !== ("undefined" || "") ? strUrlText : undefined;
+            let judge = strUrlText !== "" ? strUrlText : undefined;
 
             if (judge !== undefined) {
               window.location.href = judge;
@@ -856,8 +880,12 @@ export default function CustomButtonGenerate() {
       return;
     }
 
-    // 色反転とrippleのとき
-    if (isButton && hoverState === "色反転" && clickEffect === "ripple") {
+    // Color Inversionとrippleのとき
+    if (
+      isButton &&
+      hoverState === "Color Inversion" &&
+      clickEffect === "ripple"
+    ) {
       setHTMLCode(
         `<button id="hoverButton" onclick="handleColorInversionAndRipple(event)">${buttonText}</button>`
       );
@@ -929,7 +957,7 @@ export default function CustomButtonGenerate() {
             setTimeout(() => {
               ripple.remove();
               const strUrlText = "${urlText}";
-              let judge = strUrlText !== ("undefined" || "") ? strUrlText : undefined;
+              let judge = strUrlText !== "" ? strUrlText : undefined;
 
               if (judge !== undefined) {
                 window.location.href = judge;
@@ -946,8 +974,8 @@ export default function CustomButtonGenerate() {
       return;
     }
 
-    // 下線出現とrippleのとき
-    if (isButton && hoverState === "下線出現" && clickEffect === "ripple") {
+    // Underlineとrippleのとき
+    if (isButton && hoverState === "Underline" && clickEffect === "ripple") {
       setHTMLCode(` 
         <button class="button-css" onclick="handleRippleAndUnderline(event)">
           <span class="button-span-css hover-bg">${buttonText}</span>
@@ -1025,10 +1053,16 @@ export default function CustomButtonGenerate() {
   
             setTimeout(() => {
               ripple.remove();
-              if (${urlText}!== undefined) {
-                window.location.href = "${urlText}";
+              const strUrlText = "${urlText}";
+              let judge = strUrlText !== "" ? strUrlText : undefined;
+
+              if (judge !== undefined) {
+                window.location.href = judge;
+                return;
+              } else {
+                return;
               }
-            }, ${urlText === undefined ? 600 : 50});
+            }, ${`${urlText}` === "" ? 600 : 50});
   
           }
           </script>`);
@@ -1038,8 +1072,8 @@ export default function CustomButtonGenerate() {
       return;
     }
 
-    // ホバー時のエフェクトが色反転のとき
-    if (isButton && hoverState === "色反転") {
+    // ホバー時のエフェクトがColor Inversionのとき
+    if (isButton && hoverState === "Color Inversion") {
       setHTMLCode(
         `<button id="hoverButton" onclick="handleClick()">${buttonText}</button>`
       );
@@ -1081,7 +1115,7 @@ export default function CustomButtonGenerate() {
 
           function handleClick(event) {
             const strUrlText = "${urlText}";
-            let judge = strUrlText !== ("undefined" || "") ? strUrlText : undefined;
+            let judge = strUrlText !== "" ? strUrlText : undefined;
 
             if (judge !== undefined) {
               window.location.href = judge;
@@ -1097,8 +1131,8 @@ export default function CustomButtonGenerate() {
       return;
     }
 
-    // 下線出現だけの場合
-    if (isButton && hoverState === "下線出現") {
+    // Underlineだけの場合
+    if (isButton && hoverState === "Underline") {
       setHTMLCode(` 
         <button class="button-css" onclick="handleRippleAndUnderline(event)">
           <span class="button-span-css hover-bg">${buttonText}</span>
@@ -1147,9 +1181,15 @@ export default function CustomButtonGenerate() {
         <script>
           function handleRippleAndUnderline(event) {
             setTimeout(() => {
-              if (${urlText !== undefined}) {
-                window.location.href = "${urlText}";
-              }
+              const strUrlText = "${urlText}";
+            let judge = strUrlText !== "" ? strUrlText : undefined;
+
+            if (judge !== undefined) {
+              window.location.href = judge;
+              return;
+            } else {
+              return;
+            }
             }, ${urlText === undefined ? 600 : 50});
   
           }
@@ -1223,8 +1263,14 @@ export default function CustomButtonGenerate() {
 
           setTimeout(() => {
             ripple.remove();
-            if (${urlText}!=="") {
-              window.location.href = "${urlText}";
+            const strUrlText = "${urlText}";
+            let judge = strUrlText !== "" ? strUrlText : undefined;
+
+            if (judge !== undefined) {
+              window.location.href = judge;
+              return;
+            } else {
+              return;
             }
           }, ${urlText === "" ? 600 : 50});
 
@@ -1238,9 +1284,29 @@ export default function CustomButtonGenerate() {
 
     // changeScaleだけの場合
     if (isButton && clickEffect === "changeScale") {
-      setHTMLCode(` 
-        <button class="scale-button">${buttonText}</button>`);
-
+      if (urlText) {
+        setHTMLCode(` 
+          <button class="scale-button" onclick="handleButtonClick()">${buttonText}</button>`);
+        setJSCode(`
+            <script>
+                function handleButtonClick(event) {
+                  const strUrlText = "${urlText}";
+                  let judge = strUrlText !== "" ? strUrlText : undefined;
+      
+                  if (judge !== undefined) {
+                    window.location.href = judge;
+                    return;
+                  } else {
+                    return;
+                  }
+                }
+            </script>`);
+      } else {
+        setHTMLCode(` 
+          <button class="scale-button">${buttonText}</button>`);
+        // JSCodeは何もなし。CSSだけで実装してる
+        setJSCode(`None`);
+      }
       setCSSCode(`
         <style>
           .scale-button {
@@ -1259,15 +1325,13 @@ export default function CustomButtonGenerate() {
           }
         </style>`);
 
-      // JSCodeは何もなし。CSSだけで実装してる
-      setJSCode(`なし`);
-
       // Recoilにステートを格納する処理...
       handleSetRecoilState();
       return;
     }
 
     // ICONの場合
+    // Recoilの更新はあえてやっていない
     if (kindsOfButton === "ICON") {
       setHTMLCode(`
         <button
@@ -1282,7 +1346,7 @@ export default function CustomButtonGenerate() {
           />
         </button>
         `);
-      setCSSCode(`なし`);
+      setCSSCode(`None`);
 
       // URLが設定されている場合とそうでない場合で返すものを変える
       if (urlText) {
@@ -1303,8 +1367,15 @@ export default function CustomButtonGenerate() {
         setJSCode(`
           <script>
           function handleButtonClick() {
-            const url = "${urlText}";
-            window.location.href = url;
+            const strUrlText = "${urlText}";
+            let judge = strUrlText !== "" ? strUrlText : undefined;
+
+            if (judge !== undefined) {
+              window.location.href = judge;
+              return;
+            } else {
+              return;
+            }
           }
           
           </script>`);
@@ -1322,9 +1393,57 @@ export default function CustomButtonGenerate() {
             />
           </button>
           `);
-        setJSCode(`なし`);
+        setJSCode(`None`);
       }
 
+      return;
+    }
+
+    // ホバーエフェクト、クリックエフェクトともにNoneの場合
+    if (isButton && hoverState === "None" && clickEffect === "None") {
+      // URLが設定されている場合とそうでない場合で返すものを変える
+      if (urlText) {
+        setHTMLCode(` 
+          <button class="button-css" onclick="handleButtonClick()">${buttonText}</button>`);
+        setJSCode(`
+            <script>
+            function handleButtonClick() {
+              const strUrlText = "${urlText}";
+            let judge = strUrlText !== "" ? strUrlText : undefined;
+
+            if (judge !== undefined) {
+              window.location.href = judge;
+              return;
+            } else {
+              return;
+            }
+            }
+            
+            </script>`);
+      } else {
+        setHTMLCode(` 
+          <button class="button-css">${buttonText}</button>`);
+        setJSCode(`None`);
+      }
+
+      setCSSCode(`
+          <style>
+            .button-css {
+              padding: 10px 20px;
+              background-color: ${buttonColor};
+              color: ${buttonTextColor};
+              opacity: ${shadow};
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 16px;
+              user-select: "none";
+            }
+
+          </style>`);
+
+      // Recoilにステートを格納する処理...
+      handleSetRecoilState();
       return;
     }
   }, [
@@ -1344,10 +1463,28 @@ export default function CustomButtonGenerate() {
     <MDBContainer className="mt-4">
       <MDBRow>
         <MDBCol>
-          <div className="mb-1" style={{ fontFamily: "cursive" }}>
-            <h1 className="text-center">Custom Button Generator</h1>
-            <hr />
+          <MDBRow>
+            <div
+              className="position-relative mb-3"
+              style={{ fontFamily: "cursive" }}
+            >
+              <h1 className="position-absolute top-0 start-50 translate-middle-x">
+                {isJapanese
+                  ? "カスタムボタンジェネレーター"
+                  : "Custom Button Generator"}
+              </h1>
+              <button
+                type="button"
+                className="position-absolute top-0 end-0 btn btn-info text-white me-3"
+                onClick={handleChangeLanguage}
+              >
+                {isJapanese ? "Switch to English" : "日本語に切り替え"}
+              </button>
+            </div>
+          </MDBRow>
 
+          <div className="mb-1 mt-5" style={{ fontFamily: "cursive" }}>
+            <hr />
             <MDBRow>
               <MDBCol>
                 <div className="d-flex justify-content-center align-items-center">
@@ -1358,29 +1495,74 @@ export default function CustomButtonGenerate() {
                         marginBottom: "20px",
                       }}
                     >
-                      <h3 style={{ fontSize: "30px" }}>How to use</h3>
-                    </li>
-
-                    <li>
-                      <span>
-                        ボタン名を入力します。未入力ではボタンを作成できません。
-                      </span>
-                    </li>
-
-                    <li>
-                      <span>ボタンの色を選択します。</span>
-                    </li>
-
-                    <li>
-                      <span>作成したいボタンの種類を選択します。</span>
+                      <h3 style={{ fontSize: "30px" }}>
+                        {isJapanese ? "使い方" : "How to use"}
+                      </h3>
                     </li>
                     <li>
                       <span>
-                        ホバーの有無、クリック時のエフェクトの有無とその種類を選択できます。
+                        {isJapanese
+                          ? "ボタン名を入力（※必須項目）"
+                          : "Enter the button name (※Required)"}
                       </span>
                     </li>
                     <li>
-                      <span>影効果を選択できます。</span>
+                      <span>
+                        {isJapanese
+                          ? "遷移先URLを入力（※入力必須ではありません）"
+                          : "Enter the destination URL (※Not required)"}
+                      </span>
+                    </li>
+                    <li>
+                      <span>
+                        {isJapanese
+                          ? "ボタンの色を選択"
+                          : "Select button color"}
+                      </span>
+                    </li>
+                    <li>
+                      <span>
+                        {isJapanese
+                          ? "ボタンの文字の色を選択"
+                          : "Select the button text color"}
+                      </span>
+                    </li>
+                    <li>
+                      <span>
+                        {isJapanese
+                          ? "下線の色を選択"
+                          : "Select the underline color"}
+                      </span>
+                    </li>
+                    <li>
+                      <span>
+                        {isJapanese
+                          ? "作成したいボタンの種類を選択"
+                          : "Select the type of button you want to create"}
+                      </span>
+                    </li>
+                    <li style={{ listStylePosition: "outside" }}>
+                      <span
+                        style={
+                          !isJapanese
+                            ? {
+                                display: "block",
+                                maxWidth: "400px",
+                                whiteSpace: "normal",
+                                wordWrap: "break-word",
+                              }
+                            : undefined // isJapanese が true の場合、スタイルを適用しない
+                        }
+                      >
+                        {isJapanese
+                          ? "ホバーの有無、クリック時のエフェクトの有無とその種類を選択"
+                          : "Choose whether to hover or not, and whether to use effects when clicked, and what type of effects they will have."}
+                      </span>
+                    </li>
+                    <li>
+                      <span>
+                        {isJapanese ? "影効果を選択" : "Select Shadow Effect"}
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -1398,7 +1580,12 @@ export default function CustomButtonGenerate() {
                 {kindsOfButton === "BUTTON" ? (
                   // ボタンの種類が「BUTTON」の場合、入力状態とする
                   <colgroup className="d-inline-flex">
-                    <strong className="me-2 pt-2 text-nowrap">ボタン名:</strong>
+                    <strong
+                      className="me-2 pt-2 text-nowrap"
+                      style={{ maxWidth: "auto" }}
+                    >
+                      {isJapanese ? "ボタン名:" : "Button name:"}
+                    </strong>
                     <MDBInput
                       onChange={(e) => handleSetButtonText(e)}
                       value={buttonText}
@@ -1413,7 +1600,9 @@ export default function CustomButtonGenerate() {
                     className="d-inline-flex"
                     style={{ opacity: "20%" }}
                   >
-                    <strong className="me-2 pt-2 text-nowrap">ボタン名:</strong>
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "ボタン名:" : "Button name:"}
+                    </strong>
                     <MDBInput
                       value={buttonText}
                       style={{ width: "20em" }}
@@ -1427,7 +1616,7 @@ export default function CustomButtonGenerate() {
                   // ボタンの種類が「BUTTON」の場合、入力状態とする
                   <colgroup className="d-inline-flex">
                     <strong className="me-2 pt-2 text-nowrap">
-                      ボタンの色:
+                      {isJapanese ? "ボタンの色:" : "Button Color:"}
                     </strong>
                     <input
                       type="color"
@@ -1445,7 +1634,7 @@ export default function CustomButtonGenerate() {
                     style={{ opacity: "20%" }}
                   >
                     <strong className="me-2 pt-2 text-nowrap">
-                      ボタンの色:
+                      {isJapanese ? "ボタンの色:" : "Button Color:"}
                     </strong>
                     <input
                       type="color"
@@ -1463,7 +1652,7 @@ export default function CustomButtonGenerate() {
                   // ボタンの種類が「BUTTON」の場合、入力状態とする
                   <colgroup className="d-inline-flex">
                     <strong className="me-2 pt-2 text-nowrap">
-                      ボタンの文字の色:
+                      {isJapanese ? "ボタンの文字の色:" : "Button Text Color:"}
                     </strong>
                     <input
                       type="color"
@@ -1481,7 +1670,7 @@ export default function CustomButtonGenerate() {
                     style={{ opacity: "20%" }}
                   >
                     <strong className="me-2 pt-2 text-nowrap">
-                      文字の文字の色:
+                      {isJapanese ? "ボタンの文字の色:" : "Button Text Color:"}
                     </strong>
                     <input
                       type="color"
@@ -1495,10 +1684,12 @@ export default function CustomButtonGenerate() {
                 )}
 
                 {/* 背景色を選択させる */}
-                {kindsOfButton === "BUTTON" && hoverState === "下線出現" ? (
+                {kindsOfButton === "BUTTON" && hoverState === "Underline" ? (
                   // ボタンの種類が「BUTTON」の場合、入力状態とする
                   <colgroup className="d-inline-flex">
-                    <strong className="me-2 pt-2 text-nowrap">下線の色:</strong>
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "下線の色:" : "Underline Color:"}
+                    </strong>
                     <input
                       type="color"
                       id="colorPicker"
@@ -1514,7 +1705,9 @@ export default function CustomButtonGenerate() {
                     className="d-inline-flex"
                     style={{ opacity: "20%" }}
                   >
-                    <strong className="me-2 pt-2 text-nowrap">下線の色:</strong>
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "下線の色:" : "Underline Color:"}
+                    </strong>
                     <input
                       type="color"
                       id="colorPicker"
@@ -1528,7 +1721,9 @@ export default function CustomButtonGenerate() {
 
                 {/* ボタンの形式を選択 */}
                 <colgroup className="d-inline-flex">
-                  <strong className="me-2 pt-2">ボタンの種類:</strong>
+                  <strong className="me-2 pt-2 text-nowrap">
+                    {isJapanese ? "ボタンの種類:" : "Button Type:"}
+                  </strong>
                   <MDBDropdown>
                     <MDBDropdownToggle className="btn btn-outline-dark text-dark">
                       {kindsOfButton}
@@ -1560,8 +1755,11 @@ export default function CustomButtonGenerate() {
               <div className="d-flex justify-content-around my-3">
                 {/* URLを設定できる(未入力でもOK) */}
                 <colgroup className="d-inline-flex">
-                  <strong className="me-2 pt-2 text-nowrap">
-                    遷移先URLの設定:
+                  <strong
+                    className="me-2 pt-2 text-nowrap"
+                    style={{ maxWidth: "20em" }}
+                  >
+                    {isJapanese ? "遷移先URLの設定:" : "URL:"}
                   </strong>
                   <MDBInput
                     onChange={(e) => handleSetURLText(e)}
@@ -1574,7 +1772,9 @@ export default function CustomButtonGenerate() {
                 {kindsOfButton === "BUTTON" ? (
                   // BUTTONの場合
                   <colgroup className="d-inline-flex">
-                    <strong className="me-2 pt-2">ホバー時のエフェクト:</strong>
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "ホバーエフェクト:" : "Hover Effects:"}
+                    </strong>
                     <MDBDropdown>
                       <MDBDropdownToggle className="btn btn-outline-dark text-dark">
                         {hoverState}
@@ -1599,7 +1799,9 @@ export default function CustomButtonGenerate() {
                     className="d-inline-flex"
                     style={{ opacity: "20%" }}
                   >
-                    <strong className="me-2 pt-2">ホバー時のエフェクト:</strong>
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "ホバーエフェクト:" : "Hover Effects:"}
+                    </strong>
                     <MDBDropdown disabled>
                       <MDBDropdownToggle
                         className="btn btn-outline-dark text-dark"
@@ -1622,8 +1824,8 @@ export default function CustomButtonGenerate() {
                 {kindsOfButton === "BUTTON" ? (
                   // BUTTONの場合
                   <colgroup className="d-inline-flex">
-                    <strong className="me-2 pt-2">
-                      クリック時のエフェクト:
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "クリックエフェクト:" : "Click Effects:"}
                     </strong>
                     <MDBDropdown>
                       <MDBDropdownToggle className="btn btn-outline-dark text-dark">
@@ -1649,8 +1851,8 @@ export default function CustomButtonGenerate() {
                     className="d-inline-flex"
                     style={{ opacity: "20%" }}
                   >
-                    <strong className="me-2 pt-2">
-                      クリック時のエフェクト:
+                    <strong className="me-2 pt-2 text-nowrap">
+                      {isJapanese ? "クリックエフェクト:" : "Click Effects:"}
                     </strong>
                     <MDBDropdown>
                       <MDBDropdownToggle
@@ -1672,7 +1874,9 @@ export default function CustomButtonGenerate() {
 
                 {/* 影効果を選択させる */}
                 <colgroup className="d-inline-flex">
-                  <strong className="me-2 pt-2">影効果:</strong>
+                  <strong className="me-2 pt-2 text-nowrap">
+                    {isJapanese ? "影効果:" : "Shadow Effect:"}
+                  </strong>
                   <MDBDropdown>
                     <MDBDropdownToggle className="btn btn-outline-dark text-dark">
                       {shadow}
@@ -1715,29 +1919,29 @@ export default function CustomButtonGenerate() {
                       (() => {
                         if (
                           clickEffect === "ripple" &&
-                          hoverState === "下線出現"
+                          hoverState === "Underline"
                         ) {
                           return rippleAndUnderline;
                         } else if (
-                          hoverState === "色反転" &&
+                          hoverState === "Color Inversion" &&
                           clickEffect === "ripple"
                         ) {
                           return colorInversionAndRipple;
                         } else if (
-                          hoverState === "色反転" &&
+                          hoverState === "Color Inversion" &&
                           clickEffect === "changeScale"
                         ) {
                           return colorInversionAndChangeScale;
                         } else if (
-                          hoverState === "下線出現" &&
+                          hoverState === "Underline" &&
                           clickEffect === "changeScale"
                         ) {
                           return underLineAndChangeScale;
                         } else if (clickEffect === "ripple") {
                           return ripple;
-                        } else if (hoverState === "下線出現") {
+                        } else if (hoverState === "Underline") {
                           return onlyUnderLine;
-                        } else if (hoverState === "色反転") {
+                        } else if (hoverState === "Color Inversion") {
                           return changeColorInHovering;
                         } else if (clickEffect === "changeScale") {
                           return changeScale;
@@ -1753,7 +1957,12 @@ export default function CustomButtonGenerate() {
                                 overflow: "hidden",
                                 padding: "10px 20px",
                                 border: "none",
+                                opacity: shadow,
+                                userSelect: "none",
                               }}
+                              onClick={() =>
+                                urlText && (window.location.href = urlText)
+                              }
                             >
                               {buttonText}
                             </button>
@@ -1772,6 +1981,9 @@ export default function CustomButtonGenerate() {
                                 backgroundColor: "white",
                                 border: "none",
                               }}
+                              onClick={() =>
+                                urlText && (window.location.href = urlText)
+                              }
                             >
                               <img
                                 src={imageSrc}
@@ -1818,7 +2030,11 @@ export default function CustomButtonGenerate() {
                   <div className="my-3 d-flex">
                     <CopyToClipboard
                       text={HTMLCode}
-                      onCopy={() => showCopyMessage("HTMLをコピーしました")}
+                      onCopy={() =>
+                        showCopyMessage(
+                          isJapanese ? "HTMLをコピーしました" : "HTML copied"
+                        )
+                      }
                     >
                       <button
                         style={{
@@ -1833,7 +2049,11 @@ export default function CustomButtonGenerate() {
                     </CopyToClipboard>
                     <CopyToClipboard
                       text={CSSCode}
-                      onCopy={() => showCopyMessage("CSSをコピーしました")}
+                      onCopy={() =>
+                        showCopyMessage(
+                          isJapanese ? "CSSをコピーしました" : "CSS copied"
+                        )
+                      }
                     >
                       <button
                         style={{
@@ -1848,7 +2068,11 @@ export default function CustomButtonGenerate() {
                     </CopyToClipboard>
                     <CopyToClipboard
                       text={JSCode}
-                      onCopy={() => showCopyMessage("JSをコピーしました")}
+                      onCopy={() =>
+                        showCopyMessage(
+                          isJapanese ? "JSをコピーしました" : "JS copied"
+                        )
+                      }
                     >
                       <button
                         style={{
@@ -1864,7 +2088,13 @@ export default function CustomButtonGenerate() {
                     </CopyToClipboard>
                     <CopyToClipboard
                       text={copiedIntegratedCode}
-                      onCopy={() => showCopyMessage("まとめてコピーしました")}
+                      onCopy={() =>
+                        showCopyMessage(
+                          isJapanese
+                            ? "まとめてコピーしました"
+                            : "Copied all together"
+                        )
+                      }
                     >
                       <button
                         style={{
@@ -1875,7 +2105,7 @@ export default function CustomButtonGenerate() {
                           borderRadius: 10,
                         }}
                       >
-                        まとめてコピー
+                        {isJapanese ? "まとめてコピー" : "Copy all"}
                       </button>
                     </CopyToClipboard>
                     {/* コピー時のメッセージ表示 */}
