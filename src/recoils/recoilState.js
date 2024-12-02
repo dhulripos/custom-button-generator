@@ -9,7 +9,16 @@ const { persistAtom } = recoilPersist();
 // 同じPCでもFirefoxやEdgeなどの異なるブラウザとは共有されない。ブラウザごとにローカルストレージがある
 export const customButtonGeneratorRecoilState = atom({
   key: "customButtonGeneratorRecoilState",
-  default: {},
+  default: {
+    buttonColor: "#0400ff",
+    buttonText: "SampleButton",
+    buttonTextColor: "#ffffff",
+    clickEffect: "changeScale",
+    hoverState: "Underline",
+    kindsOfButton: "BUTTON",
+    shadow: "70%",
+    underlineColor: "#ff0000",
+  },
   effects_UNSTABLE: [persistAtom],
 });
 

@@ -26,6 +26,7 @@ import garbage from "../common/Images/garbage.png";
 import warning from "../common/Images/warning.png";
 import { UserState, checkPage, DateState } from "../recoils/recoilState";
 import LoadingMotion from "./../utils/LoadingMotion";
+import ImageOfCustomButtonGenerator from "../common/Images/ImageOfCustomButtonGenerator.webp";
 
 // 小作品一覧を表示するコンポーネント
 export default function Works() {
@@ -365,16 +366,16 @@ export default function Works() {
           <MDBCol>
             <MDBCard onClick={handleWorkById} style={{ cursor: "pointer" }}>
               <MDBCardImage
-                src="https://mdbootstrap.com/img/new/standard/city/041.webp"
-                alt="..."
+                src={ImageOfCustomButtonGenerator}
+                alt="ImageOfCustomButtonGenerator"
+                height={425}
                 position="top"
               />
               <MDBCardBody>
-                <MDBCardTitle>Card title</MDBCardTitle>
+                <MDBCardTitle>Custom Button Generator</MDBCardTitle>
                 <MDBCardText>
-                  This is a longer card with supporting text below as a natural
-                  lead-in to additional content. This content is a little bit
-                  longer.
+                  You can create your own custom buttons and use them on your
+                  website!
                 </MDBCardText>
               </MDBCardBody>
             </MDBCard>

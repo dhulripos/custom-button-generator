@@ -2028,86 +2028,98 @@ export default function CustomButtonGenerate() {
               <section className="h-100 h-custom">
                 <div style={{ position: "relative" }}>
                   <div className="my-3 d-flex">
-                    <CopyToClipboard
-                      text={HTMLCode}
-                      onCopy={() =>
-                        showCopyMessage(
-                          isJapanese ? "HTMLをコピーしました" : "HTML copied"
-                        )
-                      }
-                    >
-                      <button
-                        style={{
-                          marginRight: "5px",
-                          backgroundColor: "#ffccff",
-                          border: "none",
-                          borderRadius: 10,
-                        }}
+                    {HTMLCode && CSSCode && JSCode && (
+                      <CopyToClipboard
+                        text={HTMLCode}
+                        onCopy={() =>
+                          showCopyMessage(
+                            isJapanese ? "HTMLをコピーしました" : "HTML copied"
+                          )
+                        }
                       >
-                        Copy HTML
-                      </button>
-                    </CopyToClipboard>
-                    <CopyToClipboard
-                      text={CSSCode}
-                      onCopy={() =>
-                        showCopyMessage(
-                          isJapanese ? "CSSをコピーしました" : "CSS copied"
-                        )
-                      }
-                    >
-                      <button
-                        style={{
-                          marginRight: "5px",
-                          backgroundColor: "#ffff99",
-                          border: "none",
-                          borderRadius: 10,
-                        }}
+                        <button
+                          style={{
+                            marginRight: "5px",
+                            backgroundColor: "#ffccff",
+                            border: "none",
+                            borderRadius: 10,
+                          }}
+                        >
+                          Copy HTML
+                        </button>
+                      </CopyToClipboard>
+                    )}
+
+                    {HTMLCode && CSSCode && JSCode && (
+                      <CopyToClipboard
+                        text={CSSCode}
+                        onCopy={() =>
+                          showCopyMessage(
+                            isJapanese ? "CSSをコピーしました" : "CSS copied"
+                          )
+                        }
                       >
-                        Copy CSS
-                      </button>
-                    </CopyToClipboard>
-                    <CopyToClipboard
-                      text={JSCode}
-                      onCopy={() =>
-                        showCopyMessage(
-                          isJapanese ? "JSをコピーしました" : "JS copied"
-                        )
-                      }
-                    >
-                      <button
-                        style={{
-                          marginRight: "5px",
-                          backgroundColor: "#66e0ff",
-                          border: "none",
-                          borderRadius: 10,
-                        }}
-                        className=""
+                        <button
+                          style={{
+                            marginRight: "5px",
+                            backgroundColor: "#ffff99",
+                            border: "none",
+                            borderRadius: 10,
+                          }}
+                        >
+                          Copy CSS
+                        </button>
+                      </CopyToClipboard>
+                    )}
+
+                    {HTMLCode && CSSCode && JSCode && (
+                      <CopyToClipboard
+                        text={JSCode}
+                        onCopy={() =>
+                          showCopyMessage(
+                            isJapanese ? "JSをコピーしました" : "JS copied"
+                          )
+                        }
                       >
-                        Copy JS
-                      </button>
-                    </CopyToClipboard>
-                    <CopyToClipboard
-                      text={copiedIntegratedCode}
-                      onCopy={() =>
-                        showCopyMessage(
-                          isJapanese
-                            ? "まとめてコピーしました"
-                            : "Copied all together"
-                        )
-                      }
-                    >
-                      <button
-                        style={{
-                          color: "white",
-                          marginRight: "5px",
-                          backgroundColor: "#1a53ff",
-                          border: "none",
-                          borderRadius: 10,
-                        }}
+                        <button
+                          style={{
+                            marginRight: "5px",
+                            backgroundColor: "#66e0ff",
+                            border: "none",
+                            borderRadius: 10,
+                          }}
+                          className=""
+                        >
+                          Copy JS
+                        </button>
+                      </CopyToClipboard>
+                    )}
+
+                    {HTMLCode && CSSCode && JSCode && (
+                      <CopyToClipboard
+                        text={copiedIntegratedCode}
+                        onCopy={() =>
+                          showCopyMessage(
+                            isJapanese
+                              ? "まとめてコピーしました"
+                              : "Copied all together"
+                          )
+                        }
                       >
-                        {isJapanese ? "まとめてコピー" : "Copy all"}
-                      </button>
-                    </CopyToClipboard>
+                        <button
+                          style={{
+                            color: "white",
+                            marginRight: "5px",
+                            backgroundColor: "#1a53ff",
+                            border: "none",
+                            borderRadius: 10,
+                          }}
+                        >
+                          {isJapanese ? "まとめてコピー" : "Copy all"}
+                        </button>
+                      </CopyToClipboard>
+                    )}
+
                     {/* コピー時のメッセージ表示 */}
                     {message && (
                       <div
