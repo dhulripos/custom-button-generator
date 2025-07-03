@@ -1,7 +1,3 @@
-# これだとダメだった。Appleシリコンが影響してるっぽい。
-# ベースイメージとしてNode.jsを使用し、"build" という名前のビルドステージを定義
-# FROM node:20.12.2-alpine AS build
-
 # ARM64対応のNode.jsイメージを指定
 FROM node:20.12.2-alpine AS build
 
